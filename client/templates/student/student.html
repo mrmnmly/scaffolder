@@ -1,0 +1,48 @@
+<template name="newStudentTemplate">
+	<form id="newStudentForm">
+		<div class="controls">
+			<label for="wiek">wiek</label>
+			<input id="wiek" type="text" name="wiek">
+		</div>		<div class="controls">
+			<label for="imie">imie</label>
+			<input id="imie" type="text" name="imie">
+		</div>		<div class="controls">
+			<label for="nazwisko">nazwisko</label>
+			<input id="nazwisko" type="text" name="nazwisko">
+		</div> <input type="submit" value="submit" class="button">
+	</form>
+</template>
+
+<template name="editStudentTemplate">
+	<form id="editStudentForm">
+		<div class="controls">
+			<label for="wiek">wiek</label>
+			<input id="wiek" type="text" name="wiek">
+		</div>		<div class="controls">
+			<label for="imie">imie</label>
+			<input id="imie" type="text" name="imie">
+		</div>		<div class="controls">
+			<label for="nazwisko">nazwisko</label>
+			<input id="nazwisko" type="text" name="nazwisko">
+		</div> <input type="submit" value="submit" class="button">
+	</form>
+</template>
+
+<template name="studentListTemplate">
+	<table>
+		<thead>
+			<tr>
+				<th>id</th><th>action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each studentList}}
+				<tr>
+					<td>this._id</td><td><a href="{{pathFor 'editStudent'}}" class="button">Edit</a><a href="#" class="removeButton button">Remove</a></td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</template>
+
+
