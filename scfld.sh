@@ -20,17 +20,16 @@
 collection_name=${1^};
 collection_object=${1,};
 
-echo $collection_name;
 echo "==============";
 echo "collection" $collection_name "created";
 echo "==============";
 
 # create model folder & file
-mkdir -p "server/model/"$collection_object;
-if [ -f "server/model/"$collection_object"/"$collection_object".js" ]; then
-	mv "server/model/"$collection_object"/"$collection_object".js" "server/model/"$collection_object"/"$collection_object".js.old";
+mkdir -p "server/models/"$collection_object;
+if [ -f "server/models/"$collection_object"/"$collection_object".js" ]; then
+	mv "server/models/"$collection_object"/"$collection_object".js" "server/models/"$collection_object"/"$collection_object".js.old";
 fi
-touch "server/model/"$collection_object"/"$collection_object".js";
+touch "server/models/"$collection_object"/"$collection_object".js";
 
 # create template folder & files
 mkdir -p "client/templates/"$collection_object;
@@ -40,15 +39,21 @@ fi
 touch "client/templates/"$collection_object"/"$collection_object".html";
 
 # create controller folder & file
-mkdir -p "client/js/"$collection_object;
-if [ -f "client/js/"$collection_object"/"$collection_object".js" ]; then
-	mv "client/js/"$collection_object"/"$collection_object".js" "client/js/"$collection_object"/"$collection_object".js.old";
+mkdir -p "client/controllers/"$collection_object;
+if [ -f "client/controllers/"$collection_object"/"$collection_object".js" ]; then
+	mv "client/controllers/"$collection_object"/"$collection_object".js" "client/controllers/"$collection_object"/"$collection_object".js.old";
 fi
-touch "client/js/"$collection_object"/"$collection_object".js";
+touch "client/controllers/"$collection_object"/"$collection_object".js";
 
-model_file="server/model/"$collection_object"/"$collection_object".js";
+model_file="server/models/"$collection_object"/"$collection_object".js";
 template_file="client/templates/"$collection_object"/"$collection_object".html";
-controller_file="client/js/"#collection_object"/"$collection_object".js";
+controller_file="client/controllers/"$collection_object"/"$collection_object".js";
+
+
+# ===================================================
+# TEMPLATES
+# ===================================================
+
 
 #newDocumentForm
 new_document_template=$'<template name=\"new'$collection_name'Template'\"'>\n\t<form id='\"'new'$collection_name'Form'\"'>\n';
@@ -62,21 +67,18 @@ do
 	field_type=${i#*:};
 	echo $field_type;
 	if [ $field_type="text" ]; then
-		new_document_template+='\t\t''<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'text'\"' name='\"$field_name\"'>\n\t\t</div>';
+		new_document_template+='\t\t''<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'text'\"' name='\"$field_name\"'>\n\t\t</div>\n';
 	elif [ $field_type="date" ]; then
-		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'date'\"' name='\"$field_name\"'>\n\t\t</div>';
+		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'date'\"' name='\"$field_name\"'>\n\t\t</div>\n';
 	elif [ $field_type="number" ]; then
-		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'number'\"' name='\"$field_name\"'>\n\t\t</div>';
+		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'number'\"' name='\"$field_name\"'>\n\t\t</div>\n';
 	elif [ $field_type="email" ]; then
-		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'email'\"' name='\"$field_name\"'>\n\t\t</div>';
+		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'email'\"' name='\"$field_name\"'>\n\t\t</div>\n';
 	elif [ $field_type="textarea" ]; then
-		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<textarea id='\"$field_name\"' name='\"$field_name\"'></textarea>\n\t\t</div>';
-
-	# elif [$field_type=checkbox]; then
-	# 	checkbox_list=${i}
+		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<textarea id='\"$field_name\"' name='\"$field_name\"'></textarea>\n\t\t</div>\n';
 	fi
 done
-new_document_template+=$'\t\t<input type='\"'submit'\"' value='\"'submit'\"' class='\"'button'\"'>\n\t</form>\n</template>\n\n';
+new_document_template+=$'''\t\t<input type='\"'submit'\"' value='\"'submit'\"' class='\"'button'\"'>\n\t</form>\n</template>\n\n';
 
 #editDocumentForm will be almost the same (form id will be different) as newDocumentForm
 edit_document_template=${new_document_template/'new'$collection_name'Template'/'edit'$collection_name'Template'};
@@ -85,6 +87,46 @@ edit_document_template=${edit_document_template/'new'$collection_name'Form'/'edi
 #documentList
 document_list_template=$'<template name='\"$collection_object'ListTemplate'\"'>\n\t<table>\n\t\t<thead>\n\t\t\t<tr>\n\t\t\t\t<th>id</th><th>action</th>\n\t\t\t</tr>\n\t\t</thead>\n\t\t<tbody>\n\t\t\t{{#each '$collection_object'List}}\n\t\t\t\t<tr>\n\t\t\t\t\t<td>this._id</td><td><a href='\"'{{pathFor '\''edit'$collection_name\''}}'\"' class='\"'button'\"'>Edit</a><a href='\"'#'\"' class="removeButton button">Remove</a></td>\n\t\t\t\t</tr>\n\t\t\t{{/each}}\n\t\t</tbody>\n\t</table>\n</template>\n\n';
 
-new_document_template+=$edit_document_template
-new_document_template+=$document_list_template
-echo -e $new_document_template >> "$template_file"
+
+# merge whole template code into single object (new_document_template)
+new_document_template+=$edit_document_template;
+new_document_template+=$document_list_template;
+
+# append whole template code into template file
+echo -e $new_document_template >> "$template_file";
+
+
+
+# ===================================================
+# MODEL
+# ===================================================
+
+model_string=$''$collection_name' = new Meteor.Collection('$collection_object');\n\nMeteor.publish('\'$collection_object\'', function(){\n\treturn Meteor.'$collection_object'.find({}, fields:{';
+for i in ${@:2}
+do
+	field_name=${i%:*};
+	model_string+=$field_name':1, ';
+done
+
+# remove last character - unnecessary comma
+model_string="${model_string:0:-2}";
+
+model_string+='});\n});\n';
+
+# append whole model code to file
+echo -e $model_string >> "$model_file";
+
+
+# ===================================================
+# CONTROLLERS
+# ===================================================
+
+controller_string=$''$collection_name' = new Meteor.Collection('$collection_object');\n\n';
+
+
+
+
+controller_string+='Deps.autorun(function(){\n\tMeteor.subscribe('\'$collection_object\'');\n});';
+
+# append whole controller code to file
+echo -e $controller_string >> "$controller_file";
