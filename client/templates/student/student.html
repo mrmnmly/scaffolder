@@ -2,7 +2,7 @@
 	<form id="newStudentForm">
 		<div class="controls">
 			<label for="age">age</label>
-			<input id="age" type="text" name="age">
+			<input id="age" type="number" name="age">
 		</div>
 		<div class="controls">
 			<label for="first_name">first_name</label>
@@ -14,15 +14,15 @@
 		</div>
 		<div class="controls">
 			<label for="birth">birth</label>
-			<input id="birth" type="text" name="birth">
+			<input id="birth" type="date" name="birth">
 		</div>
 		<div class="controls">
 			<label for="cv">cv</label>
-			<input id="cv" type="text" name="cv">
+			<textarea id="cv" name="cv"></textarea>
 		</div>
 		<div class="controls">
 			<label for="note">note</label>
-			<input id="note" type="text" name="note">
+			<input id="note" type="number" name="note">
 		</div>
 		<input type="submit" value="submit" class="button">
 	</form>
@@ -32,33 +32,34 @@
 	<form id="editStudentForm">
 		<div class="controls">
 			<label for="age">age</label>
-			<input id="age" type="text" name="age">
+			<input id="age" type="number" name="age" value="{{ this.age }}">
 		</div>
 		<div class="controls">
 			<label for="first_name">first_name</label>
-			<input id="first_name" type="text" name="first_name">
+			<input id="first_name" type="text" name="first_name" value="{{ this.first_name }}">
 		</div>
 		<div class="controls">
 			<label for="last_name">last_name</label>
-			<input id="last_name" type="text" name="last_name">
+			<input id="last_name" type="text" name="last_name" value="{{ this.last_name }}">
 		</div>
 		<div class="controls">
 			<label for="birth">birth</label>
-			<input id="birth" type="text" name="birth">
+			<input id="birth" type="date" name="birth" value="{{ this.birth }}">
 		</div>
 		<div class="controls">
 			<label for="cv">cv</label>
-			<input id="cv" type="text" name="cv">
+			<textarea id="cv" name="cv" value="{{ this.cv }}"></textarea>
 		</div>
 		<div class="controls">
 			<label for="note">note</label>
-			<input id="note" type="text" name="note">
+			<input id="note" type="number" name="note" value="{{ this.note }}">
 		</div>
 		<input type="submit" value="submit" class="button">
 	</form>
 </template>
 
 <template name="studentListTemplate">
+	<a href="{{pathFor 'newStudentView'}}">New Student</a>
 	<table>
 		<thead>
 			<tr>
@@ -68,7 +69,7 @@
 		<tbody>
 			{{#each studentList}}
 				<tr>
-					<td>this._id</td><td><a href="{{pathFor 'editStudent'}}" class="button">Edit</a><a href="#" class="removeButton button">Remove</a></td>
+					<td>this._id</td><td><a href="{{pathFor 'editStudentView'}}" class="button">Edit</a><a href="#" class="removeButton button">Remove</a></td>
 				</tr>
 			{{/each}}
 		</tbody>
