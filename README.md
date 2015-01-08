@@ -29,6 +29,6 @@ It can generate model for collection made from field types:
 
 ##Usage
 
-      scfld collectionName field1:type field2:type ... fieldX:type
+      bash scfld collectionName field1:type field2:type ... fieldX:type
       
   Enjoy!
