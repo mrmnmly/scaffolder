@@ -99,11 +99,11 @@ do
 		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<textarea id='\"$field_name\"' name='\"$field_name\"'></textarea>\n\t\t</div>\n';
 		edit_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<textarea id='\"$field_name\"' name='\"$field_name\"' value='\"'{{ this.'$field_name' }}'\"'></textarea>\n\t\t</div>\n';
 	# for ver. 1+
-	elif [ $field_type == "checkbox" ]; then
-		params_array=${field_type#*[};
-		params_array="${params_array:0:-1}";
-		IFS=', ' read -a params_array <<< "$params_array";
-		echo $params_array
+	#elif [ $field_type == "checkbox" ]; then
+		#params_array=${field_type#*[};
+		#params_array="${params_array:0:-1}";
+		#IFS=', ' read -a params_array <<< "$params_array";
+		#echo $params_array
 
 	# elif [ $field_type == "checkbox_collection"]; then
 		# template_helpers+="Template.new"$collection_name"Template.helpers({\n\t";
