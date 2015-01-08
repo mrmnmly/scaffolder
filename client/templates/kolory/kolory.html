@@ -1,0 +1,31 @@
+<template name="newKoloryTemplate">
+	<form id="newKoloryForm">
+		<input type="submit" value="submit" class="button">
+	</form>
+</template>
+
+<template name="editKoloryTemplate">
+	<form id="editKoloryForm">
+		<input type="submit" value="submit" class="button">
+	</form>
+</template>
+
+<template name="koloryListTemplate">
+	<a href="{{pathFor 'newKoloryView'}}">New Kolory</a>
+	<table>
+		<thead>
+			<tr>
+				<th>id</th><th>action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each koloryList}}
+				<tr>
+					<td>this._id</td><td><a href="{{pathFor 'editKoloryView'}}" class="button">Edit</a><a href="#" class="removeButton button">Remove</a></td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</template>
+
+

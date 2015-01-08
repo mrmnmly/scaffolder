@@ -20,7 +20,6 @@
 # checkbox & radio collection field declaration syntax should match to below one:
 # field_name:field_type[collection_name]
 
-
 collection_name=${1^};
 collection_object=${1,};
 
@@ -57,7 +56,6 @@ fi
 touch "lib/"$collection_object"Router.js";
 
 
-
 model_file="server/models/"$collection_object"/"$collection_object".js";
 template_file="client/templates/"$collection_object"/"$collection_object".html";
 controller_file="client/controllers/"$collection_object"/"$collection_object".js";
@@ -80,7 +78,11 @@ do
 	field_name=${i%:*};
 	#field type
 	field_type=${i#*:};
+	#cut unnecessary (for this particular variable) array
+	field_type=${field_type%[*};
 	echo $field_type;
+	
+
 	if [ $field_type == "text" ]; then
 		new_document_template+='\t\t''<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'text'\"' name='\"$field_name\"'>\n\t\t</div>\n';
 		edit_document_template+='\t\t''<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<input id='\"$field_name\"' type='\"'text'\"' name='\"$field_name\"' value='\"'{{ this.'$field_name' }}'\"'>\n\t\t</div>\n';
@@ -97,7 +99,15 @@ do
 		new_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<textarea id='\"$field_name\"' name='\"$field_name\"'></textarea>\n\t\t</div>\n';
 		edit_document_template+='\t\t<div class='\"'controls'\"'>\n\t\t\t<label for='\"$field_name\"'>'$field_name'</label>\n\t\t\t<textarea id='\"$field_name\"' name='\"$field_name\"' value='\"'{{ this.'$field_name' }}'\"'></textarea>\n\t\t</div>\n';
 	# for ver. 1+
-	# elif [ $field_type == "checkbox"]; then
+	elif [ $field_type == "checkbox" ]; then
+		params_array=${field_type#*[};
+		params_array="${params_array:0:-1}";
+		IFS=', ' read -a params_array <<< "$params_array";
+		echo $params_array
+
+	# elif [ $field_type == "checkbox_collection"]; then
+		# template_helpers+="Template.new"$collection_name"Template.helpers({\n\t";
+
 	# elif [ $field_type == "radio"]; then
 	# elif [ $field_type == "checkbox_collection"]; then
 	# elif [ $field_type == "radio_collection"]; then
@@ -148,6 +158,16 @@ echo -e $model_string >> "$model_file";
 controller_string=$''$collection_name' = new Meteor.Collection('\'$collection_object\'');\n\n';
 
 controller_string+='Template.'$collection_object'ListTemplate.helpers({\n\t'$collection_object'List: function(){\n\t\treturn '$collection_name\.'find();\n\t}\n});\n\n';
+
+# check if some additional methods are needed
+for i in ${@:2}
+do
+	field_name=${i%:*};
+	field_type=${i#*:};
+	# if [ field_type == "checkbox" ]; then
+
+	# fi
+done
 
 # ===========	new form event 	===========
 controller_new_string+='Template.new'$collection_name'Template.events({\n\t'\''submit #new'$collection_name'Form'\'': function(e){\n\t\te.preventDefault();\n\t\tvar form = $(e.currentTarget)'\,;
